@@ -145,9 +145,53 @@ In response to this evolving challenge, a substantial body of research has devel
 
 To provide a clear and structured overview of this complex, co-evolving landscape, this survey adopts a four-pillar framework. We first establish a unified taxonomy in Section 2, defining the core research areas. Following this, we dedicate separate sections to each pillar. Section 3, \textbf{Identifying Translationese}, reviews the progression of methods for characterizing and detecting translationese artifacts. Section 4, \textbf{Evaluating its Impact}, surveys the effects of translationese on translation quality and algorithmic fairness. Section 5, \textbf{Managing its Effects}, details the development of strategies to both mitigate and leverage translationese. Finally, Section 6 discusses \textbf{Future Directions and Open Problems}, including the long-term risks of model collapse. This structure allows readers to either gain a deep understanding of a specific research pillar or to trace the historical development across all areas, providing a comprehensive and accessible guide for both newcomers and experienced researchers.
 
-\section{A Unified Taxonomy of Translationese Research}
-\subsection{Core Research Pillars}
-\subsection{Inter-Pillar Relationships}
+\section{Background: The Evolving Nature of Machine Translationese}
+
+Translationese refers to the distinctive linguistic characteristics that make translated text identifiably different from text originally written in the target language \cite{gellerstam1986translationese}. Initially studied in the context of human translation, these artifacts, or ``translation universals,'' include phenomena such as simplification (the tendency to use simpler language), normalization (the tendency to exaggerate features of the target language), and interference from the source language \cite{baker1993corpus}. As machine translation (MT) has evolved from rule-based systems to the sophisticated Large Language Models (LLMs) of today, the nature of machine translationese has co-evolved, shifting from overt grammatical errors to more subtle, systemic biases. To provide an initial insight into this evolution, we present classic examples of machine translationese from three distinct technological eras.
+
+\subsection{The SMT Era: Awkward Literalism}
+
+Statistical Machine Translation (SMT) systems, which dominated the field in the 2000s, operated by learning statistical alignments between phrases in a source and target language. While a significant leap forward, this phrase-based approach often resulted in outputs that were locally fluent but globally disfluent and awkward. The translationese of this era is characterized by literal, word-for-word translations of idioms and unnatural word order, making it easily noticeable.
+
+\begin{quote}
+\textbf{Source (Chinese):} \textit{他画蛇添足，结果把事情搞砸了。}
+
+\textbf{Hypothetical SMT Output:} \textit{He drew a snake and added feet, and as a result messed up the matter.}
+
+\textbf{Human Translation:} \textit{He ruined the matter by adding something superfluous.}
+\end{quote}
+
+In this example, the SMT system literally translates the idiom \textit{画蛇添足} (huà shé tiān zú), failing to capture its actual meaning of ruining something by doing more than is necessary. The output is a grammatically awkward and nonsensical sentence that clearly exposes the system's lack of deeper semantic understanding.
+
+\subsection{The NMT Era: Deceptive Fluency}
+
+Neural Machine Translation (NMT), particularly with the advent of the Transformer architecture, revolutionized the field by producing highly fluent and grammatically correct translations. However, this fluency can be deceptive. The translationese of the NMT era became more subtle, manifesting as a loss of lexical diversity, simplification of complex syntax, and a general tendency towards ``safe'' or generic language. The output is correct, but it often feels bland and lacks the richness of the source text.
+
+\begin{quote}
+\textbf{Source:} \textit{The legislation, a labyrinthine tapestry of clauses and sub-clauses woven together over months of contentious debate, finally passed, albeit with a palpable sense of weary resignation from all parties involved.}
+
+\textbf{Hypothetical NMT Output:} \textit{The complex law was finally passed after a long debate, but all parties felt tired and resigned.}
+
+\textbf{Human Translation:} \textit{The legislation, a labyrinthine tapestry of clauses and sub-clauses woven together over months of contentious debate, finally passed, albeit with a palpable sense of weary resignation from all parties involved.}
+\end{quote}
+
+Here, the NMT output is perfectly readable but has stripped the source text of its evocative vocabulary (``labyrinthine tapestry,'' ``palpable sense of weary resignation'') and flattened its complex sentence structure. This simplification and normalization make the text less engaging and lose the stylistic nuance of the original author.
+
+\subsection{The LLM Era: Subtle Over-Adherence}
+
+Large Language Models (LLMs) represent the current state-of-the-art, capable of producing translations that are often indistinguishable from human-written text. The translationese of this era is even more insidious. It is characterized by excessive literalism, where the model adheres too closely to the source text's syntactic structure even when a more natural target-language construction exists, and over-normalization, where it smooths out unique stylistic choices in favor of highly probable, generic phrasing.
+
+\begin{quote}
+\textbf{Source:} \textit{It was a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. (Jane Austen, Pride and Prejudice)}
+
+\textbf{Hypothetical LLM Output:} \textit{It is a universally acknowledged truth that a single man who has a good fortune must need a wife.}
+
+\textbf{Human Translation (Original):} \textit{It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.}
+\end{quote}
+
+In this case, the LLM output is grammatically flawless and conveys the correct meaning. However, it subtly alters the famous opening line. It changes the past tense ``was'' to the present tense ``is,'' replaces the more literary ``in possession of'' with the more common ``who has,'' and substitutes the formal ``in want of'' with the more direct ``must need.'' While individually minor, these changes collectively erase the distinctive 19th-century literary style of the original, replacing it with a correct but generic modern sentence. This demonstrates the challenge of LLM-era translationese: it is not about what is wrong, but about what is lost.
+
+These examples illustrate that as MT systems have become more powerful, machine translationese has not disappeared but has merely become more difficult to detect. Understanding this evolution is crucial for developing robust methods for identifying, evaluating, and managing its effects, a challenge that this survey aims to address.
 
 \section{Identifying Translationese: Characterization and Detection}
 \subsection{Foundational Concepts from Corpus-Based Studies}

@@ -143,7 +143,35 @@ The advent of NMT, while reducing overt grammatical errors, introduced more subt
 
 In response to this evolving challenge, a substantial body of research has developed methods to monitor, document, and mitigate the effects of translationese. The task of detecting translationese has progressed from manual analysis and feature-based classifiers, which relied on hand-crafted linguistic features \cite{baroni2006new,volansky2015features}, to highly accurate neural models that can learn relevant features automatically \cite{pylypenko2021comparing,amponsah2022explaining}. Characterizing the specific features of translationese across different MT architectures has also been a key focus, with studies comparing the outputs of SMT, NMT, and LLM-based systems to pinpoint their unique linguistic fingerprints \cite{riley2020translationese,zhou2024comparison}. Furthermore, various mitigation strategies have been proposed. These range from data-centric approaches, such as filtering training data to remove translationese \cite{lembersky2013improving}, to model-centric techniques, like fine-tuning models to better emulate human-written text \cite{jourdan2025translationese}. Some work has even explored leveraging translationese as a form of synthetic data to aid low-resource languages \cite{dabre2024pretraining}. The proliferation of machine-generated text also raises long-term concerns, such as ``model collapse,'' where models trained on synthetic data experience a decline in performance over time \cite{shumailov2024ai}.
 
-While several surveys have covered specific aspects of MT or translation studies, a comprehensive overview that chronologically links the evolution of MT technology with the study of its primary artifact, translationese, is currently lacking. This paper aims to fill that gap. We provide a systematic survey of translationese research, structured around the major technological paradigms: corpus-based studies, SMT, NMT, and LLMs. For each era, we review seminal works, key findings, and the development of methods for detection, characterization, and mitigation. By presenting this integrated historical perspective, we aim to provide a clear framework for understanding the current state of the field and to highlight the critical challenges and opportunities for future research in an era of ubiquitous MT. Our survey is intended to be a valuable resource for both newcomers seeking a structured introduction to the field and for experienced researchers looking to situate their work within a broader historical context.
+To provide a clear and structured overview of this complex, co-evolving landscape, this survey adopts a hybrid matrix structure. We first establish a unified framework in Section 2, defining the three core research tasks that form the pillars of translationese research: Characterization, Detection, and Mitigation. Following this framework, we dedicate separate sections to each of these core tasks. Within each of these thematic sections, we trace the chronological progression of research, from early corpus-based and statistical methods to the latest advancements in the era of NMT and LLMs. Specifically, Section 3 reviews the evolving \textbf{Characteristics} of translationese across different MT paradigms. Section 4 surveys the progression of \textbf{Detection} methods, from feature engineering to deep learning. Section 5 details the development of \textbf{Mitigation} strategies. Finally, Section 6 discusses broader impacts and future challenges, including model collapse and algorithmic fairness. This structure allows readers to either gain a deep understanding of a specific task (e.g., Detection) or to trace the historical development across all tasks, providing a comprehensive and accessible guide for both newcomers and experienced researchers.
+
+\section{A Unified Framework for Translationese Research}
+\subsection{Defining the Core Tasks}
+\subsection{Task Relationships and Research Flow}
+\subsection{Framework Overview}
+
+\section{The Evolving Characteristics of Translationese}
+\subsection{Foundational Concepts from Corpus-Based Studies}
+\subsection{Interference and Artifacts in the SMT Era}
+\subsection{Subtle Biases in the NMT Era}
+\subsection{New Patterns in the LLM Era}
+
+\section{The Progression of Detection Methods}
+\subsection{Early Approaches: Feature Engineering}
+\subsection{The Rise of Neural Classifiers}
+\subsection{Recent Advances: Explainability and Zero-shot Detection}
+
+\section{The Development of Mitigation Strategies}
+\subsection{Data Filtering and Augmentation}
+\subsection{Model Fine-tuning and Architectural Changes}
+\subsection{Prompt Engineering and Human Feedback in LLMs}
+
+\section{Broader Impacts and Future Challenges}
+\subsection{The Risk of Model Collapse}
+\subsection{Fairness, Bias, and Algorithmic Auditing}
+\subsection{Open Problems and Future Research Directions}
+
+\section{Conclusion}
 
 \iftaclpubformat
 \section{Courtesy warning: Common violations of \taclpaper rules that have

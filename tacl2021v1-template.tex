@@ -169,31 +169,31 @@ In this example, the SMT system literally translates the idiom \textit{画蛇添
 
 \subsection{The NMT Era: Deceptive Fluency}
 
-Neural Machine Translation (NMT), particularly with the advent of the Transformer architecture, revolutionized the field by producing highly fluent and grammatically correct translations. However, this fluency can be deceptive. The translationese of the NMT era became more subtle, manifesting as a loss of lexical diversity, simplification of complex syntax, and a general tendency towards ``safe'' or generic language. The output is correct, but it often feels bland and lacks the richness of the source text.
+Neural Machine Translation (NMT), particularly with the advent of the Transformer architecture, revolutionized the field by producing highly fluent and grammatically correct translations. However, this fluency can be deceptive. The translationese of the NMT era became more subtle, manifesting as a loss of lexical diversity, simplification of complex syntax, and a general tendency towards ``safe'' or generic language. As \citet{riley2020translationese} demonstrate, NMT models often produce outputs that achieve high automatic scores (like BLEU) but are disliked by human raters because they feel unnatural. The output is correct, but it often feels bland and lacks the richness of the source text.
 
 \begin{quote}
-\textbf{Source:} \textit{The legislation, a labyrinthine tapestry of clauses and sub-clauses woven together over months of contentious debate, finally passed, albeit with a palpable sense of weary resignation from all parties involved.}
+\textbf{Source (German):} \textit{Die Gesetzgebung, ein labyrinthisches Geflecht von Klauseln und Unterklauseln, das über Monate kontroverser Debatten zusammengewoben wurde, wurde schließlich verabschiedet, wenn auch mit einem spürbaren Gefühl der müden Resignation aller beteiligten Parteien.}
 
 \textbf{Hypothetical NMT Output:} \textit{The complex law was finally passed after a long debate, but all parties felt tired and resigned.}
 
 \textbf{Human Translation:} \textit{The legislation, a labyrinthine tapestry of clauses and sub-clauses woven together over months of contentious debate, finally passed, albeit with a palpable sense of weary resignation from all parties involved.}
 \end{quote}
 
-Here, the NMT output is perfectly readable but has stripped the source text of its evocative vocabulary (``labyrinthine tapestry,'' ``palpable sense of weary resignation'') and flattened its complex sentence structure. This simplification and normalization make the text less engaging and lose the stylistic nuance of the original author.
+Here, the NMT output is perfectly readable but has stripped the source text of its evocative vocabulary (``labyrinthisches Geflecht'' translated as ``complex law'' instead of ``labyrinthine tapestry'') and flattened its complex sentence structure. This simplification and normalization make the text less engaging and lose the stylistic nuance of the original author.
 
 \subsection{The LLM Era: Subtle Over-Adherence}
 
-Large Language Models (LLMs) represent the current state-of-the-art, capable of producing translations that are often indistinguishable from human-written text. The translationese of this era is even more insidious. It is characterized by excessive literalism, where the model adheres too closely to the source text's syntactic structure even when a more natural target-language construction exists, and over-normalization, where it smooths out unique stylistic choices in favor of highly probable, generic phrasing.
+Large Language Models (LLMs) represent the current state-of-the-art, capable of producing translations that are often indistinguishable from human-written text. The translationese of this era is even more insidious. It is characterized by excessive literalism, where the model adheres too closely to the source text's syntactic structure even when a more natural target-language construction exists, and over-normalization, where it smooths out unique stylistic choices in favor of highly probable, generic phrasing. \citet{li2025lost} systematically evaluate this phenomenon, showing that even powerful LLMs produce ``unexpected unnatural translations'' due to biases introduced during supervised fine-tuning.
 
 \begin{quote}
-\textbf{Source:} \textit{It was a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. (Jane Austen, Pride and Prejudice)}
+\textbf{Source (Chinese):} \textit{少样本LLMs仍然落后于常规微调。}
 
-\textbf{Hypothetical LLM Output:} \textit{It is a universally acknowledged truth that a single man who has a good fortune must need a wife.}
+\textbf{LLM Output (from \citet{li2025lost}):} \textit{Few-shot LLMs still lag behind vanilla fine-tuned models in the task.}
 
-\textbf{Human Translation (Original):} \textit{It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.}
+\textbf{Refined Human Translation:} \textit{Few-shot LLMs still lag behind vanilla fine-tuning.}
 \end{quote}
 
-In this case, the LLM output is grammatically flawless and conveys the correct meaning. However, it subtly alters the famous opening line. It changes the past tense ``was'' to the present tense ``is,'' replaces the more literary ``in possession of'' with the more common ``who has,'' and substitutes the formal ``in want of'' with the more direct ``must need.'' While individually minor, these changes collectively erase the distinctive 19th-century literary style of the original, replacing it with a correct but generic modern sentence. This demonstrates the challenge of LLM-era translationese: it is not about what is wrong, but about what is lost.
+In this example, cited directly from \citet{li2025lost}, the LLM output is overly literal. It translates ``常规微调'' (chángguī wēitiáo) as ``vanilla fine-tuned models in the task,'' which is a wordy and unnatural phrasing in English. The refined version, ``vanilla fine-tuning,'' is more concise and natural. This demonstrates the challenge of LLM-era translationese: it is not about what is wrong, but about what is lost in the subtle choices of phrasing and style.
 
 These examples illustrate that as MT systems have become more powerful, machine translationese has not disappeared but has merely become more difficult to detect. Understanding this evolution is crucial for developing robust methods for identifying, evaluating, and managing its effects, a challenge that this survey aims to address.
 

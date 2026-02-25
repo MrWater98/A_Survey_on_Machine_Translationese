@@ -14,6 +14,10 @@
 % Chinese support
 \usepackage{xeCJK}
 
+% TikZ for figures
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc}
+
 
 %% Package options:
 %% Short version: "hyperref" and "submission" are the defaults.
@@ -147,7 +151,141 @@ The advent of NMT, while reducing overt grammatical errors, introduced more subt
 
 In response to this evolving challenge, a substantial body of research has developed methods to monitor, document, and mitigate the effects of translationese. The task of detecting translationese has progressed from manual analysis and feature-based classifiers, which relied on hand-crafted linguistic features \cite{baroni2006new,ilisei2010identifying,volansky2015features}, to highly accurate neural models that can learn relevant features automatically \citet{pylypenko2021comparing} and \citet{amponsah2022explaining}. Characterizing the specific features of translationese across different MT architectures has also been a key focus, with studies comparing the outputs of SMT, NMT, and LLM-based systems to pinpoint their unique linguistic fingerprints \cite{riley2020translationese}. Furthermore, various mitigation strategies have been proposed. These range from data-centric approaches, such as filtering training data to remove translationese \cite{lembersky2013improving}, to model-centric techniques, like fine-tuning models to better emulate human-written text \cite{jourdan2025translationese}. Some work has even explored leveraging translationese as a form of synthetic data to aid low-resource languages \cite{dabre2024pretraining}. The proliferation of machine-generated text also raises long-term concerns, such as ``model collapse,'' where models trained on synthetic data experience a decline in performance over time \cite{shumailov2024ai}.
 
-To provide a clear and structured overview of this complex, co-evolving landscape, this survey adopts a four-pillar framework. We first establish a unified taxonomy in Section 2, defining the core research areas. Following this, we dedicate separate sections to each pillar. Section 3, \textbf{Identifying Translationese}, reviews the progression of methods for characterizing and detecting translationese artifacts. Section 4, \textbf{Evaluating its Impact}, surveys the effects of translationese on translation quality and algorithmic fairness. Section 5, \textbf{Managing its Effects}, details the development of strategies to both mitigate and leverage translationese. Finally, Section 6 discusses \textbf{Future Directions and Open Problems}, including the long-term risks of model collapse. This structure allows readers to either gain a deep understanding of a specific research pillar or to trace the historical development across all areas, providing a comprehensive and accessible guide for both newcomers and experienced researchers.
+To provide a clear and structured overview of this complex, co-evolving landscape, this survey adopts a four-pillar framework. Figure~\ref{fig:mt-timeline} provides a comprehensive overview of the co-evolution of machine translation technologies and translationese characteristics over the past three decades. The timeline is organized into four distinct eras, each marked by a paradigm shift in MT architecture and a corresponding transformation in the nature of translationese. The \textbf{Corpus-Based Era} (1990s--2000s) established the foundational concepts of translation universals, identifying phenomena such as simplification, normalization, and explicitation in human-translated texts \cite{baker1993corpus,laviosa1998corpus}. The \textbf{SMT Era} (2003--2015), initiated by the development of phrase-based statistical models \cite{koehn2003statistical}, introduced machine-generated translationese characterized by awkward literalism and source language interference. Detection methods during this period relied heavily on hand-crafted linguistic features and support vector machines, achieving accuracies around 90\% \cite{baroni2006new,ilisei2010identifying}.
+
+The \textbf{NMT Era} (2015--2020) brought a fundamental shift with the introduction of attention mechanisms \cite{bahdanau2015neural} and the Transformer architecture \cite{vaswani2017attention}. While these models produced highly fluent outputs, they exhibited a more subtle form of translationese: a loss of lexical diversity, over-simplification of complex structures, and the emergence of ``post-editese'' in human-edited machine translations \cite{toral2019post,vanmassenhove2019getting}. This deceptive fluency necessitated a methodological shift from feature engineering to feature learning, with neural classifiers based on BERT and other pre-trained models becoming the dominant detection approach \cite{pylypenko2021comparing}. Most recently, the \textbf{LLM Era} (2020--present) has introduced yet another layer of complexity. While LLMs can produce near-human quality translations, they often exhibit excessive literalism and over-normalization, smoothing out stylistic variations in favor of statistically dominant patterns \cite{li2025how,wang2024benchmarking}. Detection in this era increasingly relies on zero-shot and few-shot prompting of LLMs themselves, reflecting a move towards more flexible, prompt-based evaluation paradigms.
+
+Critically, the figure also highlights an emerging risk: the potential for \textbf{model collapse} due to the recursive training of models on synthetic, machine-generated data \cite{shumailov2024ai}. As translationese-laden text proliferates online and is subsequently scraped for training future models, there is a danger of a degenerative feedback loop that could erode linguistic diversity and model performance. This underscores the importance of the research surveyed in this paper---not only for improving current MT systems but also for safeguarding the long-term health of the digital linguistic ecosystem.
+
+Based on this historical overview, this survey is structured as follows. We first establish a unified taxonomy in Section 2, defining the core research areas. Following this, we dedicate separate sections to each pillar. Section 3, \textbf{Identifying Translationese}, reviews the progression of methods for characterizing and detecting translationese artifacts. Section 4, \textbf{Evaluating its Impact}, surveys the effects of translationese on translation quality and algorithmic fairness. Section 5, \textbf{Managing its Effects}, details the development of strategies to both mitigate and leverage translationese. Finally, Section 6 discusses \textbf{Future Directions and Open Problems}, including the long-term risks of model collapse. This structure allows readers to either gain a deep understanding of a specific research pillar or to trace the historical development across all areas, providing a comprehensive and accessible guide for both newcomers and experienced researchers.
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+    scale=0.85,
+    every node/.style={font=\small},
+    milestone/.style={circle, fill=blue!70, text=white, minimum size=0.6cm, font=\tiny\bfseries},
+    era/.style={rectangle, rounded corners, fill=gray!20, minimum height=1.2cm, font=\footnotesize\bfseries},
+    feature/.style={rectangle, rounded corners, fill=orange!20, text width=3.2cm, align=center, font=\tiny},
+    method/.style={rectangle, rounded corners, fill=green!20, text width=3.2cm, align=center, font=\tiny}
+]
+
+% Timeline base
+\draw[line width=2pt, gray!50] (0,0) -- (16,0);
+
+% Era backgrounds
+\fill[blue!5] (0,-0.5) rectangle (4,3.5);
+\fill[orange!5] (4,-0.5) rectangle (8,3.5);
+\fill[green!5] (8,-0.5) rectangle (12,3.5);
+\fill[red!5] (12,-0.5) rectangle (16,3.5);
+
+% Era labels at top
+\node[era, fill=blue!10] at (2,3.2) {Corpus-Based};
+\node[era, fill=orange!10] at (6,3.2) {SMT Era};
+\node[era, fill=green!10] at (10,3.2) {NMT Era};
+\node[era, fill=red!10] at (14,3.2) {LLM Era};
+
+% Time markers on timeline
+\node[below] at (0,0) {\tiny 1990s};
+\node[below] at (4,0) {\tiny 2003};
+\node[below] at (8,0) {\tiny 2015};
+\node[below] at (12,0) {\tiny 2020};
+\node[below] at (16,0) {\tiny 2025};
+
+% Layer 1: Key Milestones (top layer, y=2.5)
+\node[milestone] (baker) at (1,2.5) {};
+\node[above=0.1cm of baker, text width=2.5cm, align=center, font=\tiny] {1993: Baker\\Translation Universals};
+
+\node[milestone] (koehn) at (5,2.5) {};
+\node[above=0.1cm of koehn, text width=2.5cm, align=center, font=\tiny] {2003: Koehn et al.\\Phrase-based SMT};
+
+\node[milestone] (bahdanau) at (8.5,2.5) {};
+\node[above=0.1cm of bahdanau, text width=2.5cm, align=center, font=\tiny] {2015: Bahdanau\\Attention Mechanism};
+
+\node[milestone] (vaswani) at (10.5,2.5) {};
+\node[above=0.1cm of vaswani, text width=2.5cm, align=center, font=\tiny] {2017: Vaswani\\Transformer};
+
+\node[milestone] (llm) at (13,2.5) {};
+\node[above=0.1cm of llm, text width=2.5cm, align=center, font=\tiny] {2020+: GPT\\LLM Translation};
+
+% Connecting arrows for milestones
+\draw[->, thick, blue!50] (baker) -- (koehn);
+\draw[->, thick, blue!50] (koehn) -- (bahdanau);
+\draw[->, thick, blue!50] (bahdanau) -- (vaswani);
+\draw[->, thick, blue!50] (vaswani) -- (llm);
+
+% Layer 2: Translationese Characteristics (middle layer, y=1.2)
+\node[feature] at (2,1.2) {
+    \textbf{Translation Universals}\\
+    • Simplification\\
+    • Normalization\\
+    • Explicitation
+};
+
+\node[feature] at (6,1.2) {
+    \textbf{Awkward Literalism}\\
+    • Source interference\\
+    • Word-for-word idioms\\
+    • Unnatural word order
+};
+
+\node[feature] at (10,1.2) {
+    \textbf{Deceptive Fluency}\\
+    • Lexical diversity loss\\
+    • Over-simplification\\
+    • Post-editese
+};
+
+\node[feature] at (14,1.2) {
+    \textbf{Subtle Over-Adherence}\\
+    • Excessive literalism\\
+    • Over-normalization\\
+    • Stylistic flattening
+};
+
+% Layer 3: Detection Methods (bottom layer, y=-0.3)
+\node[method] at (2,-0.3) {
+    \textbf{Manual Analysis}\\
+    Corpus comparison\\
+    Linguistic features
+};
+
+\node[method] at (6,-0.3) {
+    \textbf{Feature-Based}\\
+    SVM, n-grams\\
+    POS tags, ~90\% acc.
+};
+
+\node[method] at (10,-0.3) {
+    \textbf{Neural Approaches}\\
+    BERT, LSTM\\
+    Feature learning
+};
+
+\node[method] at (14,-0.3) {
+    \textbf{LLM-Based}\\
+    Prompting, Few-shot\\
+    Zero-shot detection
+};
+
+% Warning indicator for model collapse
+\node[draw=red, thick, rectangle, rounded corners, fill=red!10, text width=2.5cm, align=center, font=\tiny] at (15.5,-1.5) {
+    \textbf{⚠ Risk:}\\
+    Model Collapse\\
+    Data Contamination
+};
+
+% Legend
+\node[anchor=west, font=\tiny] at (0,-2.5) {\textbf{Legend:}};
+\node[milestone, minimum size=0.4cm] at (1.5,-2.5) {};
+\node[anchor=west, font=\tiny] at (1.8,-2.5) {Key Milestone};
+\node[feature, text width=2cm, minimum height=0.4cm] at (4.5,-2.5) {Translationese};
+\node[method, text width=2cm, minimum height=0.4cm] at (7,-2.5) {Detection Method};
+
+\end{tikzpicture}
+\caption{Evolution of Machine Translation Paradigms and Translationese Characteristics (1990s--2025). This timeline illustrates the co-evolution of MT technologies and translationese over three decades. The top layer shows key technological milestones, the middle layer highlights dominant translationese features in each era, and the bottom layer traces detection methodology evolution. Note the progression from overt grammatical errors in SMT to subtle stylistic biases in LLMs, necessitating increasingly sophisticated detection approaches. The warning indicator highlights emerging risks of model collapse due to synthetic data contamination.}
+\label{fig:mt-timeline}
+\end{figure*}
 
 \section{Background: The Evolving Nature of Machine Translationese}
 

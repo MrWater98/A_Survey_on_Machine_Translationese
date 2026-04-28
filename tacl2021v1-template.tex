@@ -148,6 +148,13 @@ The field of machine translation (MT) has undergone a dramatic evolution, from r
 
 Unlike a static phenomenon, translationese has co-evolved with MT paradigms, as illustrated in Figure~\ref{fig:mt-timeline}. Early corpus-based studies identified general features such as simplification, normalization, and explicitation \cite{laviosa1998corpus}.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figure1_timeline_prototype.png}
+\caption{Evolution of Machine Translation Paradigms and Translationese Characteristics (1990s--2025). This timeline illustrates the co-evolution of MT technologies, dominant features (from literalism to subtle biases), and the shift from feature-based to prompt-based detection. The warning indicator highlights risks of model collapse.}
+\label{fig:mt-timeline}
+\end{figure*}
+
 The \textit{SMT era} (2000s) formalized translationese detection as binary classification using feature-based classifiers \cite{baroni2006new,volansky2015features}, revealing source-language interference that identifies a translation's origin \cite{koppel2011translationese,van2008source}.
 
 The \textit{NMT era} (2010s) improved fluency but introduced subtle biases: loss of lexical richness \cite{vanmassenhove2018getting} and stylistic flattening, plus ``post-editese'' \cite{toral2019post}. Detection evolved from hand-crafted features to neural models \cite{pylypenko2021comparing,amponsah2022explaining}.
@@ -287,13 +294,11 @@ The role of translationese in \textbf{zero-shot and low-resource settings} remai
 
 \section{Conclusion}
 
-This survey has traced the evolution of translationese research from its roots in descriptive translation studies to its current status as a central challenge in the era of Large Language Models. What was once viewed primarily as a set of interesting linguistic universals—simplification, normalization, and interference—has become a critical factor in the quality, fairness, and long-term sustainability of machine translation systems.
+This survey has traced the evolution of translationese research from descriptive translation studies to its current status as a central challenge in the era of Large Language Models. What was once viewed as interesting linguistic universals—simplification, normalization, and interference—has become a critical factor in the quality, fairness, and long-term sustainability of machine translation systems.
 
-We have seen that while neural architectures have achieved unprecedented levels of fluency, they have not eliminated translationese; rather, they have transformed it into a more subtle and insidious phenomenon. The traces produced by modern models, while less overt than the ``broken'' output of the past, continue to distort evaluation metrics, perpetuate demographic biases, and threaten the diversity of our digital linguistic ecosystem.
+While neural architectures have achieved unprecedented fluency, they have not eliminated translationese; rather, they have transformed it into a more subtle phenomenon. Modern models continue to distort evaluation metrics, perpetuate demographic biases, and threaten linguistic diversity. Yet translationese is not merely a problem; it is also a powerful lens through which we can understand our models and human translation itself. By treating translationese as a distinct stylistic variety, we can develop more flexible MT systems, improve low-resource translation, and create better quality estimation tools.
 
-However, translationese is not merely a problem to be solved; it is also a powerful lens through which we can understand the inner workings of our models and the nature of human translation itself. By treating translationese as a distinct stylistic variety, we can develop more flexible MT systems, improve low-resource translation, and create more effective tools for quality estimation.
-
-As we move forward, the goal of machine translation must shift from achieving statistical ``parity'' with human-generated translationese to pursuing \textbf{linguistic authenticity}. This requires a move away from data-hungry, likelihood-based optimization towards models that are stylistically aware, culturally sensitive, and capable of preserving the rich diversity of human expression. The study of translationese will remain at the heart of this endeavor, providing both the diagnostic tools and the conceptual framework for building the next generation of truly natural translation systems.
+As we move forward, the goal of machine translation must shift from achieving statistical ``parity'' to pursuing \textbf{linguistic authenticity}. This requires stylistically aware, culturally sensitive models capable of preserving the rich diversity of human expression. The study of translationese will remain at the heart of this endeavor, providing both the diagnostic tools and conceptual framework for building the next generation of truly natural translation systems.
 
 \bibliography{translationese}
 \bibliographystyle{acl_natbib}

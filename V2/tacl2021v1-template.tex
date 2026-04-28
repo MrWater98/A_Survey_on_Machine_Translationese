@@ -1,0 +1,289 @@
+% File tacl2021v1.tex
+% Dec. 15, 2021
+
+% The English content of this file was modified from various *ACL instructions
+% by Lillian Lee and Kristina Toutanova
+%
+% LaTeXery is mostly all adapted from acl2018.sty.
+
+\documentclass[11pt,a4paper]{article}
+\usepackage{times,latexsym}
+\usepackage{url}
+\usepackage[T1]{fontenc}
+
+% Chinese support
+\usepackage{xeCJK}
+
+% Graphics support
+\usepackage{graphicx}
+
+% TikZ for figures (optional, not needed for PNG figures)
+% \usepackage{tikz}
+% \usetikzlibrary{shapes,arrows,positioning,calc}
+
+
+%% Short version: "hyperref" and "submission" are the defaults.
+%% More verbose version:
+%% Most compact command to produce a submission version with hyperref enabled
+%%    \usepackage[]{tacl2021v1}
+%% Most compact command to produce a "camera-ready" version
+%%    \usepackage[acceptedWithA]{tacl2021v1}
+%% Most compact command to produce a double-spaced copy-editor's version
+%%    \usepackage[acceptedWithA,copyedit]{tacl2021v1}
+%
+%% If you need to disable hyperref in any of the above settings (see Section
+%% "LaTeX files") in the TACL instructions), add ",nohyperref" in the square
+%% brackets. (The comma is a delimiter in case there are multiple options specified.)
+
+\usepackage{tacl2021v1}
+% \setlength\titlebox{10cm} % <- for Option 2 below
+
+%%%% Material in this block is specific to generating TACL instructions
+\usepackage{xspace,mfirstuc,tabulary}
+\newcommand{\dateOfLastUpdate}{Dec. 15, 2021}
+\newcommand{\styleFileVersion}{tacl2021v1}
+
+\newcommand{\ex}[1]{{\sf #1}}
+
+\newif\iftaclinstructions
+\taclinstructionsfalse % AUTHORS: do NOT set this to true
+\iftaclinstructions
+\renewcommand{\confidential}{}
+\renewcommand{\anonsubtext}{(No author info supplied here, for consistency with
+TACL-submission anonymization requirements)}
+\newcommand{\instr}
+\fi
+
+%
+\iftaclpubformat % this "if" is set by the choice of options
+\newcommand{\taclpaper}{final version\xspace}
+\newcommand{\taclpapers}{final versions\xspace}
+\newcommand{\Taclpaper}{Final version\xspace}
+\newcommand{\Taclpapers}{Final versions\xspace}
+\newcommand{\TaclPapers}{Final Versions\xspace}
+\else
+\newcommand{\taclpaper}{submission\xspace}
+\newcommand{\taclpapers}{{\taclpaper}s\xspace}
+\newcommand{\Taclpaper}{Submission\xspace}
+\newcommand{\Taclpapers}{{\Taclpaper}s\xspace}
+\newcommand{\TaclPapers}{Submissions\xspace}
+\fi
+
+%%%% End TACL-instructions-specific macro block
+%%%%
+
+\title{A Survey on Machine Translationese}
+
+% Author information does not appear in the pdf unless the "acceptedWithA" option is given
+
+% The author block may be formatted in one of two ways:
+
+% Option 1. Author’s address is underneath each name, centered.
+
+\author{
+  Template Author1\Thanks{The {\em actual} contributors to this instruction
+    document and corresponding template file are given in Section
+    \ref{sec:contributors}.} 
+  \\
+  Template Affiliation1/Address Line 1
+  \\
+  Template Affiliation1/Address Line 2
+  \\
+  Template Affiliation1/Address Line 2
+  \\
+  \texttt{template.email1example.com}
+  \And
+  Template Author2 
+  \\
+  Template Affiliation2/Address Line 1
+  \\
+  Template Affiliation2/Address Line 2
+  \\
+  Template Affiliation2/Address Line 2
+  \\
+  \texttt{template.email2@example.com}
+}
+
+% % Option 2.  Author’s address is linked with superscript
+% % characters to its name, author names are grouped, centered.
+
+% \author{
+%   Template Author1\Thanks{The {\em actual} contributors to this instruction
+%     document and corresponding template file are given in Section
+%     \ref{sec:contributors}.}$^\diamond$ 
+%   \and
+%   Template Author2$^\dagger$
+%   \\
+%   \ \\
+%   $^\diamond$Template Affiliation1/Address Line 1
+%   \\
+%   Template Affiliation1/Address Line 2
+%   \\
+%   Template Affiliation1/Address Line 2
+%   \\
+%   \texttt{template.email1example.com}
+%   \\
+%   \ \\
+%   \\
+%   $^\dagger$Template Affiliation2/Address Line 1
+%   \\
+%   Template Affiliation2/Address Line 2
+%   \\
+%   Template Affiliation2/Address Line 2
+%   \\
+%   \texttt{template.email2@example.com}
+% }
+
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  The field of machine translation (MT) has evolved from statistical (SMT) and neural (NMT) models to the current paradigm of Large Language Models (LLMs). A persistent by-product of this technological progression is ``translationese''---systematic linguistic patterns that distinguish machine-translated text from human-written text. The characteristics of translationese have co-evolved with MT systems, shifting from overt grammatical errors in early models to more subtle biases, including simplification, normalization, and excessive literalism in modern NMT and LLM outputs. This paper provides a comprehensive survey of this research landscape, reviewing the progression of methods for the detection, characterization, and mitigation of translationese.
+\end{abstract}
+
+\section{Introduction}
+
+The field of machine translation (MT) has undergone a dramatic evolution, from rule-based systems to the sophisticated Large Language Models (LLMs) of today. This progression, marked by milestones such as phrase-based Statistical MT (SMT) \cite{koehn2003statistical}, the attention mechanism in Neural MT (NMT) \cite{bahdanau2015neural}, and the Transformer architecture \cite{vaswani2017attention}, has significantly enhanced translation quality and accessibility. However, a persistent by-product of this technological advancement is ``translationese''---systematic linguistic patterns that distinguish translated text from text originally authored in the target language \cite{gellerstam1986translationese}. Understanding the nature and evolution of translationese is not merely an academic exercise; it is critical for improving MT systems, ensuring fairness, and mitigating long-term risks, such as the degradation of training data.
+
+Unlike a static phenomenon, translationese has co-evolved with MT paradigms, as illustrated in Figure~\ref{fig:mt-timeline}. Early corpus-based studies identified general features such as simplification, normalization, and explicitation \cite{laviosa1998corpus}.
+
+The \textit{SMT era} (2000s) formalized translationese detection as binary classification using feature-based classifiers \cite{baroni2006new,volansky2015features}, revealing source-language interference that identifies a translation's origin \cite{koppel2011translationese,van2008source}.
+
+The \textit{NMT era} (2010s) improved fluency but introduced subtle biases: loss of lexical richness \cite{vanmassenhove2018getting} and stylistic flattening, plus ``post-editese'' \cite{toral2019post}. Detection evolved from hand-crafted features to neural models \cite{pylypenko2021comparing,amponsah2022explaining}.
+
+The \textit{LLM era} shows excessive literalism and over-normalization \cite{wang2024benchmarking}, with translationese pervading benchmarks \cite{church2025emerging} and raising model collapse concerns \cite{shumailov2024ai}.
+
+In response to these evolving challenges, a substantial body of research has developed methods to monitor, document, and mitigate the effects of translationese. The task of detecting translationese has progressed from manual analysis and feature-based classifiers, which relied on hand-crafted linguistic features, to highly accurate neural models that can learn relevant features automatically \cite{pylypenko2021comparing,amponsah2022explaining}. Characterizing the specific features of translationese across different MT architectures has also been a key focus, with studies comparing the outputs of SMT, NMT, and LLM-based systems to pinpoint their unique linguistic fingerprints \cite{riley2020translationese}. Furthermore, various mitigation strategies have been proposed, ranging from data-centric approaches such as filtering training data \cite{lembersky2013improving} to model-centric techniques including fine-tuning models to better emulate human-written text \cite{jourdan2025translationese}. Some work has even explored leveraging translationese as a form of synthetic data to aid low-resource languages \cite{dabre2024pretraining}.
+
+This survey adopts a four-pillar framework: (1) \textit{Identifying Translationese}, (2) \textit{Evaluating its Impact}, (3) \textit{Managing its Effects}, and (4) \textit{Future Directions}.
+
+\section{Background: The Evolving Nature of Machine Translationese}
+
+Translationese refers to the distinctive linguistic characteristics that make translated text identifiably different from text originally written in the target language \cite{gellerstam1986translationese}. Initially studied in the context of human translation, these phenomena---often referred to as ``translation universals''---include simplification (the tendency to use simpler language), normalization (the tendency to exaggerate features of the target language), and interference from the source language \cite{baker1993corpus}. As machine translation (MT) has evolved from rule-based systems to the sophisticated Large Language Models (LLMs) of today, the nature of machine translationese has co-evolved, shifting from overt grammatical errors to more subtle, systemic biases. To provide an initial insight into this evolution, we present classic examples of machine translationese from three distinct technological eras.
+
+\subsection{Illustrative Examples}
+
+SMT produced awkward literalism (e.g., translating ``画蛇添足'' as ``drew a snake and added feet''). NMT achieved fluency but introduced deceptive simplification and normalization, stripping evocative vocabulary and flattening complex syntax. LLMs produce excessive literalism and over-normalization, retaining syntactic patterns even when they reduce naturalness \cite{wang2024benchmarking,li2025lost}.
+
+\section{Identifying Translationese: Characterization and Detection}
+
+This section surveys the evolution of methods for identifying machine translationese, tracing the progression from foundational corpus-based studies to modern neural approaches. We structure this review chronologically, highlighting how the understanding and detection of translationese have co-evolved with MT paradigms.
+
+\subsection{Foundational Concepts from Corpus-Based Studies}
+
+The systematic study of translationese originates from the field of Corpus-Based Translation Studies (CTS), which emerged in the 1990s. Before this, observations about the peculiar nature of translated text were largely anecdotal and confined to literary criticism. CTS provided a new paradigm, enabling researchers to analyze large electronic corpora of translated and non-translated texts to identify systematic, quantifiable differences \cite{laviosa1998corpus}. This empirical approach led to the formulation of several influential hypotheses about the nature of translation, often referred to as ``translation universals.''
+
+One of the most prominent hypotheses is \textbf{simplification}, which posits that translated texts tend to be lexically and syntactically simpler than original texts. This can manifest in several ways, such as a lower type-token ratio (TTR), indicating less lexical diversity; shorter average sentence length; and a preference for more common words and grammatical structures \cite{baker1993corpus}. For example, a translator might subconsciously replace a rare, nuanced verb with a more generic one or break up a long, complex sentence into several shorter ones to reduce cognitive load.
+
+Another key hypothesis is \textbf{explicitation}, the tendency for translators to make implicit information in the source text more explicit in the target text. This can involve adding cohesive devices such as conjunctions (e.g., ``however,'' ``therefore''), clarifying pronoun references, or spelling out cultural assumptions that would be obvious to a source-language reader but not to a target-language one. While explicitation can improve clarity, it can also lead to a more verbose and less natural-sounding text.
+
+Finally, \textbf{normalization} (or conventionalization) suggests that translated texts tend to exaggerate the typical features of the target language, making them more ``normal'' than original texts. This can involve a preference for standard collocations, a tendency to avoid creative or unusual language, and a general regression to the mean of the statistical properties of the target language. As \citet{gellerstam1986translationese} observed in his early work on Swedish novels translated from English, translated texts often feel ``flatter'' and less stylistically adventurous than their non-translated counterparts.
+
+It is important to note that these hypotheses are not without their critics. Some scholars argue that they are not true ``universals'' but rather tendencies that are highly dependent on factors such as the language pair, the direction of translation, and the experience of the translator \cite{zanettin2013corpus}. A related concept, \textbf{interference} (or ``shining-through''), posits that many features of translationese are simply the result of the structure of the source language being inappropriately carried over into the target language. Despite these debates, the concepts of simplification, explicitation, and normalization laid the crucial groundwork for all subsequent research into translationese, providing a conceptual vocabulary and a methodological toolkit that would later be adapted for the study of machine translation.
+
+\subsection{Feature-Based Methods in the SMT Era}
+
+The rise of Statistical Machine Translation (SMT) in the 2000s marked a pivotal moment for translationese research. For the first time, large quantities of machine-generated text were available for analysis, and the task of identifying translationese shifted from a descriptive, linguistic endeavor to a predictive, computational one. The central goal became to automatically distinguish between original text and translated text, a task that was formalized as a binary classification problem.
+
+    \item \textbf{Lexical Features:} These capture aspects of word usage. They include simple measures such as n-gram frequencies (unigrams, bigrams, trigrams), which can reveal patterns of overuse or underuse of certain words and phrases. More sophisticated lexical features include TTR and its variants to measure lexical diversity, and the frequency of function words, which are often a strong indicator of translationese.
+    % \item \textbf{Syntactic Features:} These features are derived from the grammatical structure of the text. They often require parsing the text to obtain a syntax tree. Common syntactic features include the frequency of different part-of-speech (POS) tags and sequences, the depth of parse trees (as a measure of syntactic complexity), and the frequency of specific grammatical constructions (e.g., passive voice).
+    \item \textbf{Syntactic Features:} These features are derived from the grammatical structure of the text. They often require parsing the text to obtain a syntax tree. Common syntactic features include the frequency of different part-of-speech (POS) tags and sequences, the depth of parse trees (as a measure of syntactic complexity), and the frequency of specific grammatical constructions (e.g., passive voice).
+    % \item \textbf{Information-Theoretic Features:} These features, such as perplexity and cross-entropy, measure how ``surprising'' a text is with respect to a language model trained on a large corpus of original text. The intuition is that translated text, due to its more conventional nature, will have a lower perplexity (i.e., be less surprising) than original text.
+    \item \textbf{Information-Theoretic Features:} These features, such as perplexity and cross-entropy, measure how ``surprising'' a text is with respect to a language model trained on a large corpus of original text. The intuition is that translated text, due to its more conventional nature, will have a lower perplexity (i.e., be less surprising) than original text.
+\end{itemize}
+
+Using these features, researchers were able to build classifiers that could identify translationese with high accuracy, often exceeding 90\% \cite{baroni2006new}. A systematic evaluation of these feature sets was provided by \citet{volansky2015features}, who tested multiple linguistically informed feature categories against the canonical translation universals hypotheses, finding that while some feature sets reliably distinguished translated from original texts, others performed at near-chance level---suggesting that certain ``universal'' assumptions require empirical reconsideration. This line of research also led to more nuanced insights. \citet{koppel2011translationese} introduced the concept of ``translationese dialects,'' showing that the features of translationese vary depending on the source language. Similarly, \citet{van2008source} demonstrated the existence of ``source language markers,'' specific features that betray the origin of the text. This work was not purely academic; it had practical applications for improving SMT systems. For example, \citet{lembersky2013improving} showed that by adapting translation models to the specific characteristics of translationese, they could achieve significant improvements in translation quality.
+
+\subsection{Neural Approaches in the NMT Era}
+
+The transition from SMT to Neural Machine Translation (NMT) in the mid-2010s brought about another paradigm shift. NMT models, particularly those based on the Transformer architecture \cite{vaswani2017attention}, produced translations that were significantly more fluent and natural-sounding than their SMT predecessors. This had two major consequences for translationese research.
+
+First, the nature of translationese itself became more subtle. The overt grammatical errors and awkward phrasing common in SMT outputs were largely eliminated. Instead, NMT translationese manifested as more nuanced biases, such as a loss of lexical diversity, a tendency towards more conservative language use, and a flattening of stylistic variation \cite{vanmassenhove2018getting}. This made detection more challenging, as the statistical signals were weaker.
+
+Second, the research methodology shifted from \textbf{feature engineering} to \textbf{feature learning}. Instead of manually crafting features, researchers began to use deep neural networks, particularly pre-trained language models such as BERT, to learn relevant features directly from the data. In this approach, the entire text is fed into the model, which then outputs a probability that the text is translated. \citet{pylypenko2021comparing} conducted a thorough comparison of feature-engineering and feature-learning approaches, finding that while neural models generally performed better, the combination of both often yielded the best results.
+
+This shift also brought a new focus on \textbf{explainability}. Since neural models are often black boxes, researchers sought to understand \textit{what} features the models were learning to distinguish between original and translated text. Techniques such as attention visualization and probing tasks were used to interpret the decisions of the models. For example, \citet{amponsah2022explaining} used attention mechanisms to show that neural models were implicitly learning some of the same syntactic and lexical features that had been hand-crafted in the SMT era.
+
+The NMT era also saw the emergence of new concepts. \citet{toral2019post} introduced the term ``post-editese'' to describe the language produced when humans post-edit machine translation output. He argued that post-editese is a distinct variety of language, different from both human translation and raw MT, and that it represents an ``exacerbated translationese.'' Furthermore, \citet{riley2020translationese} argued that in the context of large multilingual NMT models, translationese can be thought of as a distinct ``language'' in its own right, with its own grammar and vocabulary. This perspective has important implications for how we train and evaluate multilingual models.
+
+The LLM era has thus pushed the field of translationese identification beyond simple binary classification. The new frontier lies in developing nuanced, explainable, and equitable methods for stylistic analysis, often leveraging the very models that produce the translationese in the first place. Future work will likely focus on real-time detection systems, automated quality assessment, and the integration of translationese detection into the core of MT evaluation and development pipelines.
+
+\section{Evaluating its Impact: Quality, Bias, and Fairness}
+
+While the previous section focused on identifying translationese, this section explores its consequences. The presence of these linguistic features is not merely a theoretical curiosity; it has profound and often detrimental effects on the entire machine translation ecosystem, from the evaluation of translation quality to the perpetuation of societal biases. We examine these impacts through three critical lenses: the distortion of quality metrics and the debate over human parity; the risk of algorithmic bias and homogenization; and the misrepresentation of gender and other demographic information.
+
+\subsection{Effects on Translation Quality and Human Parity}
+
+The relationship between translationese and perceived translation quality is complex and often paradoxical. Intuitively, one might assume that text laden with unnatural patterns is inherently of lower quality. While this is often true from a human perspective, the metrics used to automatically evaluate machine translation systems can tell a different, more misleading story. This discrepancy has been a central challenge in MT evaluation and has fueled a contentious debate over the concept of ``human parity.''
+
+A key issue is that translationese can artificially inflate automatic evaluation scores such as BLEU. \citet{riley2020translationese} demonstrated this phenomenon by explicitly biasing an NMT model to produce more translationese. Counterintuitively, this led to an increase in BLEU scores while human evaluators rated the same output as lower in both fluency and adequacy. This ``gaming" of the metric occurs because translationese often relies on simpler, more frequent, and more predictable lexical choices. Since reference translations used in evaluation are themselves a form of translated text and often exhibit similar properties, a system that produces translationese is, in a sense, better at matching the statistical profile of the reference, even if the output is less natural to a native speaker.
+
+This problem is at the heart of the controversy surrounding claims of ``human parity" in machine translation. Several high-profile studies have claimed that their MT systems perform on par with professional human translators. However, subsequent research has called these claims into question by highlighting the confounding role of translationese in the evaluation data. \citet{toral2018reassessing} and \citet{freitag2019translationese} conducted detailed re-evaluations of these claims; similarly, \citet{bizzoni2020human} systematically compared human and machine translationese, finding that while MT systems produce some translationese-like features, they do not fully replicate the specific patterns found in human translations, arguing that the test sets used were often composed of translated texts (e.g., news articles translated from another language) rather than original, natively-written texts. When an MT system is evaluated on its ability to reproduce human-generated translationese, achieving ``parity" does not mean the system can produce text indistinguishable from that of a native human writer; it only means it is good at mimicking the specific artifacts of human translation. As \citet{freitag2019translationese} argue, this is not a true test of native-level quality, leading them to recommend that such reverse-created test data be omitted from future evaluations.
+
+Beyond the immediate challenges to evaluation, translationese introduces a more insidious long-term risk: the gradual erosion of linguistic diversity. This phenomenon, often termed \textbf{homogenization}, describes the tendency of machine translation systems to produce outputs that are less varied and more conventional than human-written text. The models learn the statistical regularities of their training data---much of which is itself translationese---and regress towards a linguistic mean, smoothing over the stylistic richness, idiomatic expressions, and creative nuances that characterize authentic communication. \citet{sizov2024analysing} provide a comparative analysis of translationese characteristics, showing that even advanced LLMs tend to produce text that is stylistically less adventurous than human translations \cite{vanmassenhove2021machine}. This creates a feedback loop: as more machine-generated text populates the internet, future models trained on this data will be exposed to an increasingly homogenized and impoverished linguistic environment.
+
+This feedback loop can culminate in a catastrophic failure mode known as \textbf{model collapse}. As described by \citet{shumailov2024ai}, when generative models are recursively trained on data produced by previous versions of themselves, they can enter a degenerative process that leads to irreversible defects. The model begins to overfit to its own predictions, amplifying the most common patterns while forgetting the less frequent but often crucial details that reside in the tails of the original data distribution. In the context of translation, this means that rare words, complex syntactic structures, and subtle cultural references that were already underrepresented in the training data may disappear entirely from the generative capabilities of the model. The result is a model that produces increasingly generic and bland output, eventually losing its ability to generate high-quality, diverse text.
+
+\subsection{Gender and Demographic Representation}
+
+The homogenizing effect of translationese extends beyond stylistic variation to the very representation of people. Translation models, in their tendency to simplify and normalize, often erase social and demographic diversity, defaulting to the most statistically common or unmarked forms. This has the most pronounced and well-documented consequences in the domain of gender.
+
+Gender bias in machine translation is a long-standing problem. In many languages, gender is a grammatical category, and translating from a language with less grammatical gender (e.g., English) to one with more (e.g., French or Spanish) requires the model to make a choice. When the source text is ambiguous (e.g., "a doctor"), models trained on biased data will often default to the stereotypical gender, typically masculine \cite{vanmassenhove2018getting}. Translationese exacerbates this issue; the drive towards normalization reinforces the statistical dominance of masculine forms in the training corpus, making it even less likely for the model to produce gender-inflected outputs that challenge societal stereotypes.
+
+The challenge has become more acute with the growing recognition of non-binary gender identities and the push for more inclusive language. The patterns of translationese---simplification and conservatism---are fundamentally at odds with the linguistic innovation required to represent these identities fairly. Recent work has shown that even state-of-the-art LLMs struggle with this task. \citet{jourdan2025fairtranslate} introduced FairTranslate, a dataset specifically designed to evaluate non-binary gender biases in English-to-French translation. Their evaluation of several leading LLMs revealed ``substantial biases in gender representation,'' highlighting that models often fail to correctly translate inclusive language such as the singular `they' or neopronouns.
+
+This failure is not merely a technical shortcoming; it is a direct consequence of the models optimizing for statistical likelihood over social fairness. The linguistic patterns associated with inclusive language are, by definition, less frequent in the vast corpora of historical text used for training. A model guided by the principles of translationese will naturally see these patterns as noisy, low-probability outliers and will attempt to ``correct" them by reverting to more common, binary gender forms. The impact of translationese, therefore, is not just a matter of stylistic fidelity but of social equity. It can render certain demographic groups invisible and perpetuate harmful stereotypes, amplifying existing societal biases rather than mitigating them.
+
+\section{Managing its Effects: Mitigation and Application}
+
+As the understanding of translationese has matured, research has shifted from merely identifying its presence to actively managing its effects. This section surveys the strategies developed to mitigate the negative impacts of translationese—such as quality degradation and bias—as well as emerging methods that leverage the unique properties of translationese for positive applications.
+
+\subsection{Data-Centric Strategies}
+
+Data-centric approaches focus on the composition and curation of training corpora to control the influence of translationese. These methods are based on the insight that MT models are highly sensitive to the linguistic properties of their input data.
+
+\textbf{Filtering and Weighting:} A primary strategy involves identifying and either removing or down-weighting translated text within training corpora. \citet{lembersky2013improving} pioneered this approach in the SMT era, demonstrating that translation models trained exclusively on original (non-translated) text consistently outperformed those trained on translationese, even when the latter were larger. They proposed adapting the translation model to the specific characteristics of the original text of the target domain. In the NMT era, this has evolved into more sophisticated data selection techniques that use translationese classifiers to filter out low-quality synthetic data or to prioritize human-authored text \cite{pylypenko2021comparing}.
+
+\textbf{Synthetic Data Management:} The widespread use of back-translation---generating synthetic parallel data by translating monolingual target-language text into the source language---has introduced a new layer of complexity. While back-translation significantly improves fluency, it also introduces systematic biases. \citet{riley2020translationese} addressed this by using tags to distinguish between authentic and synthetic data. This allows the model to learn the distinction and avoid propagating the biases of the synthetic source into the target output.
+
+\textbf{Structural Restoration:} Some researchers have proposed frameworks to explicitly ``undo'' the simplification effects of translation. \citet{chen2012simplification} introduced a Simplification-Translation-Restoration framework for cross-domain SMT. This approach first simplifies the source text to make it easier to translate and then applies a restoration step to recover the complex stylistic and structural features of the original domain, effectively mitigating the flattening effect of the MT process.
+
+\subsection{Model-Centric Strategies}
+
+Model-centric strategies involve architectural or procedural changes to the MT systems themselves to reduce the generation of translationese.
+
+\textbf{Fine-tuning and Supervised Training:} The way models are trained, particularly during the supervised fine-tuning (SFT) phase, has a significant impact on translationese. \citet{li2025lost} argue that the common practice of SFT on high-quality human translations can inadvertently encourage ``literalism'' in LLMs, as the models learn to over-rely on the structure of the source text. They suggest that mitigation requires more diverse training objectives that reward stylistic naturalness over strict structural adherence. Similarly, \citet{jourdan2025translationese} explore fine-tuning strategies to reduce the bias and normalization effects that often lead to the erasure of inclusive language and non-binary gender representation.
+
+\textbf{In-Context Learning and Prompting:} For LLMs, the flexibility of in-context learning (ICL) offers a powerful tool for mitigation. By providing the model with examples of both literal (translationese) and natural human translations, or by explicitly instructing the model to avoid specific artifacts such as over-normalization, researchers have shown that the ``naturalness'' of the output can be significantly improved \cite{wang2024benchmarking,agrawal2023incontext}. This approach allows for real-time mitigation without the need for expensive re-training.
+
+While often viewed as a negative byproduct, translationese possesses unique properties that can be leveraged for specific computational tasks.
+
+\textbf{Low-Resource Translation:} In scenarios where authentic human-written parallel data is scarce, translationese—particularly in the form of synthetic data—can be a vital resource. \citet{dabre2024pretraining} demonstrate that pre-training on large amounts of machine-generated (and thus translationese-heavy) text can provide a crucial foundation for low-resource languages, which can then be refined with a small amount of high-quality human data. In this context, translationese acts as a ``stepping stone'' to improve basic translation capabilities.
+
+\textbf{Translationese as a Stylistic Pivot:} \citet{riley2020translationese} propose a novel perspective: treating translationese as a distinct ``language'' or stylistic variety within a multilingual model. By using language tags to explicitly mark translationese, they show that a model can learn to translate \textit{into} or \textit{away from} the translationese style. This not only improves the understanding of the model of different linguistic varieties but also allows users to select the desired level of naturalness at inference time.
+
+\textbf{Quality Estimation and Evaluation:} The very markers that define translationese can serve as valuable signals for quality estimation (QE). If an MT output exhibits strong markers of translationese (e.g., excessive literalism or extreme simplification), it can be flagged as potentially low-quality or in need of human post-editing. This transforms the detection of translationese from a purely analytical task into a practical tool for monitoring and improving the output of production MT systems \cite{toral2018reassessing, sizov2024analysing}.
+
+\section{Future Directions and Open Problems}
+
+Despite decades of research, translationese remains a dynamic and evolving field. The shift towards large-scale generative models has introduced new complexities that require interdisciplinary solutions.
+
+\subsection{Mitigating the Recursive Loop: Data Provenance and Watermarking}
+
+As the proportion of machine-generated text on the internet grows, the risk of \textbf{model collapse} becomes an existential threat to future MT development \cite{shumailov2024ai}. A critical future direction is the development of robust \textbf{data provenance} techniques. Identifying translationese will no longer be just a stylistic exercise but a prerequisite for data curation. Future research must focus on:
+\begin{itemize}
+    % \item \textbf{Digital Watermarking:} Embedding imperceptible signals in MT output to facilitate its identification in future crawls.
+    \item \textbf{Digital Watermarking:} Embedding imperceptible signals in MT output to facilitate its identification in future crawls.
+    % \item \textbf{High-Precision Classifiers:} Developing detection systems that can distinguish between human-generated translationese and machine-generated artifacts with high reliability. This includes moving beyond simple lexical features towards information-theoretic measures, such as entropy analysis, to quantify the "predictability" and "richness" of translated text \cite{wang2024benchmarking}.
+    \item \textbf{High-Precision Classifiers:} Developing detection systems that can distinguish between human-generated translationese and machine-generated output with high reliability. This includes moving beyond simple lexical features towards information-theoretic measures, such as entropy analysis, to quantify the ``predictability'' and ``richness'' of translated text \cite{wang2024benchmarking}. Recent work by \citet{kunilovskaya2026translationese} offers a principled theoretical grounding for this direction, proposing that translationese can be understood as a cognitively rational response to translation task difficulty: translators produce more deviant output when facing higher cognitive load, and information-theoretic metrics derived from LLM surprisal prove to be among the strongest predictors of this deviation.
+    % \item \textbf{Authentic Data Recovery:} Exploring methods to "de-bias" or "un-flatten" synthetic text to recover the original linguistic richness of the source domain.
+    \item \textbf{Authentic Data Recovery:} Exploring methods to "de-bias" or "un-flatten" synthetic text to recover the original linguistic richness of the source domain.
+\end{itemize}
+
+\subsection{Translationese in Cross-Lingual Transfer and Zero-Shot Learning}
+
+The role of translationese in \textbf{zero-shot and low-resource settings} remains under-explored. While current work suggests that translationese can serve as a useful pivot \cite{dabre2024pretraining, riley2020translationese}, it also risks propagating systemic biases into languages where authentic parallel data is nearly non-existent. Future work should investigate whether translationese characteristics act as a "universal pivot language" that facilitates transfer, or if they create a "linguistic ceiling" that prevents models from ever reaching native-level proficiency in low-resource contexts. Understanding the trade-off between the \textit{utility} of synthetic data and the \textit{fidelity} of the resulting output is a major open problem.
+
+
+\end{document}

@@ -16,6 +16,8 @@
 
 % Graphics support
 \usepackage{graphicx}
+\usepackage{amsmath}
+
 
 % TikZ for figures (optional, not needed for PNG figures)
 % \usepackage{tikz}
@@ -138,8 +140,10 @@ TACL-submission anonymization requirements)}
 
 \begin{document}
 \maketitle
+
 \begin{abstract}
 % [Polish] Original:   The field of machine translation (MT) has evolved from statistical (SMT) and neural (NMT) models to the current paradigm of Large Language Models (LLMs). A persistent artifact of this technological progression is ``translationese''---systematic linguistic patterns that distinguish machine-translated text from human-written text. The characteristics of translationese have co-evolved with MT systems, shifting from overt grammatical errors in early models to more subtle biases, including simplification, normalization, and excessive literalism in modern NMT and LLM outputs. This paper provides a comprehensive survey of this research landscape, reviewing the progression of methods for the detection, characterization, and mitigation of translationese.
+
   The field of machine translation (MT) has evolved from statistical (SMT) and neural (NMT) models to the current paradigm of Large Language Models (LLMs). A persistent by-product of this technological progression is ``translationese''---systematic linguistic patterns that distinguish machine-translated text from human-written text. The characteristics of translationese have co-evolved with MT systems, shifting from overt grammatical errors in early models to more subtle biases, including simplification, normalization, and excessive literalism in modern NMT and LLM outputs. This paper provides a comprehensive survey of this research landscape, reviewing the progression of methods for the detection, characterization, and mitigation of translationese.
 \end{abstract}
 
@@ -248,7 +252,7 @@ The rise of Statistical Machine Translation (SMT) in the 2000s marked a pivotal 
 
 % [Polish] Original: In this paradigm, a given text $x$ is classified as either belonging to the class $Y=1$ (translated) or $Y=0$ (original). The dominant approach was to use supervised machine learning models, particularly Support Vector Machines (SVMs), to learn a decision boundary between the two classes. An SVM learns a hyperplane defined by a weight vector $\mathbf{w}$ and a bias $b$ that best separates the data points. The classification of a new text $x$ is then given by:
 In this paradigm, a given text $x$ is classified as either belonging to the class $Y=1$ (translated) or $Y=0$ (original). The dominant approach was to use supervised machine learning models, particularly Support Vector Machines (SVMs), to learn a decision boundary between the two classes. An SVM learns a hyperplane defined by a weight vector $\mathbf{w}$ and a bias $b$ that best separates the data points. The classification of a new text $x$ is then given by:
-
+\vspace{-0.3cm}
 $$ f(x) = \text{sign}(\mathbf{w}^T \phi(x) + b) $$
 
 % [Polish] Original: where $\phi(x) \in \mathbb{R}^d$ is a feature vector that represents the text $x$ in a $d$-dimensional space. The success of this approach hinged entirely on the quality of the hand-crafted features in $\phi(x)$.
@@ -282,6 +286,8 @@ The advent of LLMs reshaped the landscape. Their near-human fluency renders trad
 Researchers are turning to \textbf{zero-shot and few-shot detection}, leveraging LLMs as detectors via sophisticated prompting (e.g., rating ``naturalness'') instead of training dedicated classifiers \cite{dabre2024pretraining}. Parallelly, focus is shifting to \textbf{stylistic analysis}. \citet{li2025lost} propose measuring ``literalism scores'' via semantic and syntactic parallelism, moving beyond binary detection to understand translationese's specific nature and impact on readers.
 
 Research also examines \textbf{cross-model variations}, as different LLMs exhibit distinct patterns based on training data, architecture, and fine-tuning \cite{wang2024benchmarking}. Furthermore, the \textbf{multilingual context} is critical; low-resource languages often exhibit pronounced translationese. \citet{jourdan2025translationese} argue this can amplify biases, necessitating equitable detection methods. Ultimately, the LLM era pushes identification toward nuanced, explainable stylistic analysis, with future work targeting real-time detection and integration into MT pipelines.
+
+\vspace{-0.2cm}
 
 \section{Evaluating its Impact: Quality, Bias, and Fairness}
 
